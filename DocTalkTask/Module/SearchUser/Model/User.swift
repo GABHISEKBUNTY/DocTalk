@@ -41,22 +41,3 @@ class User {
     
 }
 
-/// Model to store additional user details apart from those available in Search API.
-class User: User {
-    
-    var name: String
-    var company: String
-    var blog: String
-    var gistsURL: String
-    //var followers: Int
-    
-    override init(attributes: [String: Any]) {
-        name = attributes["name"] as? String ?? ""
-        company = attributes["company"] as? String ?? ""
-        blog = attributes["blog"] as? String ?? ""
-        gistsURL = attributes["gists_url"] as? String ?? ""
-        super.init(attributes: attributes)
-    }
-    
-    
-}

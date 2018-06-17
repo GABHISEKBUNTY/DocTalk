@@ -11,7 +11,7 @@ import RxSwift
 
 class WebServiceRequest {
     
-    class func searchUserResult(searchText: String, manager: WebServiceManagerProtocol) -> Observable<([UserResult]?, String?)> {
+    class func searchUser(searchText: String, manager: WebServiceManagerProtocol) -> Observable<([User]?, String?)> {
         let request = SearchGithubUserWebServiceRequest(manager: manager, searchText: searchText)
         return request.start()
     }

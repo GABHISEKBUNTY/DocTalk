@@ -9,7 +9,7 @@
 import Foundation
 
 /// Model to store the result from github Search API.
-class UserResult {
+class User {
     
     var gitHubId: String
     var avatarUrl: String
@@ -42,7 +42,7 @@ class UserResult {
 }
 
 /// Model to store additional user details apart from those available in Search API.
-class User: UserResult {
+class User: User {
     
     var name: String
     var company: String

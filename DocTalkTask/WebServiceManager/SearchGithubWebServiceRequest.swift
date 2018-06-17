@@ -30,13 +30,13 @@ class SearchGithubUserWebServiceRequest: DCWebServiceRequest {
         super.init(manager: manager, url: url)
     }
     
-    func start() -> Observable<([UserResult]?, String?)> {
+    func start() -> Observable<([User]?, String?)> {
         return manager.requestAPI(url: url, parameter: nil, httpMethodType: .GET).map { (returnData) in
             let (responseData, errorMessage) = returnData
             guard let response = responseData, let results = response["items"] as? [[String: AnyObject]] else {
                 return (nil, errorMessage!)
             }
-            return (results.map { UserResult(attributes: $0) }, nil)
+            return (results.map { User(attributes: $0) }, nil)
         }
     }
     

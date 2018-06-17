@@ -24,7 +24,7 @@ class UserTableCellViewModel: UserTableCellViewModelRepresentable {
     init() {
     }
     
-    init(userData: UserResult) {
+    init(userData: User) {
         self.imageURL = Observable.just(userData.avatarUrl)
         self.titleLabelText = Observable.just(userData.gitHubId)
         self.subTitleLabelText = Observable.just("SCORE - \(String(format: "%.2f", userData.score))")

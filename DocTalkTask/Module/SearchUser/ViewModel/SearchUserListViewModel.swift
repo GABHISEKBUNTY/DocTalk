@@ -29,10 +29,10 @@ class SearchUserListViewModel {
     private func getTableDataSource() -> Driver<[UserTableCellViewModelRepresentable]> {
         return textFieldValueEntered.asObservable().debug().do(onNext: { _ in
             ActivityIndicator.displayActivityIndicator()
-        }).observeOn(ConcurrentDispatchQueueScheduler(qos: .background)).flatMapLatest({ [weak self] searchText -> Observable<([UserResult]?,String?)> in
+        }).observeOn(ConcurrentDispatchQueueScheduler(qos: .background)).flatMapLatest({ [weak self] searchText -> Observable<([User]?,String?)> in
             guard searchText != "" else { return Observable.just((nil, nil)) }
             guard let _self = self else { return Observable.just((nil, "Something went wrong!")) }
-            return WebServiceRequest.searchUserResult(searchText: searchText, manager: _self.webServiceManager)
+            return WebServiceRequest.searchUser(searchText: searchText, manager: _self.webServiceManager)
         }).observeOn(MainScheduler.instance)
             .do(onNext: { _ in
                 ActivityIndicator.hideActivityIndicator()

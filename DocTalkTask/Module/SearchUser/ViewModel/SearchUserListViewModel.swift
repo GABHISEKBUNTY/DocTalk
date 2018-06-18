@@ -30,7 +30,6 @@ class SearchUserListViewModel {
         return textFieldValueEntered.asObservable().debug().do(onNext: { _ in
             ActivityIndicator.displayActivityIndicator()
         }).observeOn(ConcurrentDispatchQueueScheduler(qos: .background)).flatMapLatest({ [weak self] searchText -> Observable<([User]?,String?)> in
-            guard searchText != "" else { return Observable.just((nil, nil)) }
             guard let _self = self else { return Observable.just((nil, "Something went wrong!")) }
             return WebServiceRequest.searchUser(searchText: searchText, manager: _self.webServiceManager)
         }).observeOn(MainScheduler.instance)
@@ -41,7 +40,7 @@ class SearchUserListViewModel {
                 let (userList, errorMessage) = response
                 guard let users = userList else {
                     // Show error Message
-                    if errorMessage == nil { return [] }
+                    guard let message = errorMessage, message != WebserviceConstants.ErrorMessage.ignoreMessage else { return [] }
                     Helper.showAlert(message: errorMessage!, title: "Error")
                     return []
                 }

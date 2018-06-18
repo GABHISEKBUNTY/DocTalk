@@ -9,6 +9,14 @@
 import UIKit
 import RxSwift
 
+struct WebserviceConstants {
+    
+    struct ErrorMessage {
+        static let ignoreMessage = "ignoreMessage"
+    }
+    
+}
+
 enum APIType {
     case POST
     case GET
@@ -45,13 +53,21 @@ class WebServiceManager: WebServiceManagerProtocol {
             }
         }
         
-        return URLSession.shared.rx.json(request: request).map { json -> ([String: AnyObject]?, String?) in
-            guard let jsonResponse = json as? [String: AnyObject] else {
-                return (nil, "Something went wrong!")
-            }
-            
-            return (jsonResponse, nil)
-        }
+        return URLSession.shared.rx.response(request: request)
+            .debug("my request") // this will print out information to console
+            .flatMap({ (response) -> Observable<([String: AnyObject]?,String?)> in
+                let (httpResponse, data) = response
+                guard 200 ..< 300 ~= httpResponse.statusCode else { return Observable.just((nil, WebserviceConstants.ErrorMessage.ignoreMessage)) }
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        return Observable.just((json as [String : AnyObject],nil))
+                    }
+                } catch let error {
+                    return Observable.just((nil,error.localizedDescription))
+                }
+                return Observable.just((nil, "Something went wrong!"))
+            })
+        
     }
     
 }
